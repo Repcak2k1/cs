@@ -1,0 +1,125 @@
+#include <stdio.h>
+#include <math.h>
+#include <time.h>
+#include <stdlib.h>
+
+float ch(float x);
+int n = 10;
+float a = -2;
+float b = 2;
+float x;
+int k =0;
+
+
+int main()
+{
+    for( x = a; x <= b; x += ((b-a)/(n-1)))
+    {
+        k++;
+        printf(" x = %12.5lf ch(x) = %12.5lf \n", x, ch(x) );
+    }
+    printf( "loop was done %d times", k );
+}
+
+
+float ch(float x){
+    return ((exp(x)+exp(-x))/2);
+}
+
+
+
+
+
+
+#include <stdio.h>
+#include <math.h>
+#include <time.h>
+#include <stdlib.h>
+
+float ch(float x);
+int n = 50;
+float a = -2;
+float b = 2;
+float x;
+int k =0;
+
+
+int main()
+{
+
+    float* x_value = (float*)malloc( n * sizeof(float) );
+    float *ch_value = (float*)malloc( n * sizeof(float) );
+    int i = 0;
+    for( x = a; x <= b; x += ((b-a)/(n-1)))
+    {
+        k++;
+        //printf(" x = %12.5lf ch(x) = %12.5lf \n", x, ch(x) );
+        
+        x_value[i] = x;
+        ch_value[i] = ch(x);
+        ++i;
+    }
+    for(int i = 0; i < n; ++i){
+        printf("value of x is: %.5lf  ", x_value[i]);
+        printf("value of ch is: %.5lf\n", ch_value[i]);
+    }
+    printf( "loop was done %d times", k );
+    
+    free(x_value);
+    free(ch_value);
+}
+
+
+float ch(float x){
+    return ((exp(x)+exp(-x))/2);
+}
+
+#include <stdio.h>
+#include <math.h>
+#include <time.h>
+#include <stdlib.h>
+
+float ch(float x);
+int n = 50;
+float a = -2;
+float b = 2;
+float x;
+int k =0;
+
+
+int main()
+{
+    FILE *xv;
+    FILE *chv;
+    xv = fopen("lab7 x values.txt", "w");
+    chv = fopen("lab7 ch values.txt", "w");
+    float* x_value = (float*)malloc( n * sizeof(float) );
+    float *ch_value = (float*)malloc( n * sizeof(float) );
+    int i = 0;
+    for( x = a; x <= b; x += ((b-a)/(n-1)))
+    {
+        k++;
+        //printf(" x = %12.5lf ch(x) = %12.5lf \n", x, ch(x) );
+        
+        x_value[i] = x;
+        ch_value[i] = ch(x);
+        ++i;
+    }
+    for(int i = 0; i < n; ++i){
+        printf("value of x is: %.5lf  ", x_value[i]);
+        printf("value of ch is: %.5lf\n", ch_value[i]);
+        fprintf(xv, "%.5lf \n ", x_value[i]);
+        fprintf(chv, " %.5lf\n", ch_value[i]);
+    }
+    printf( "loop was done %d times", k );
+    
+    free(x_value);
+    free(ch_value);
+    fclose(xv);
+    fclose(chv);
+}
+
+
+float ch(float x){
+    return ((exp(x)+exp(-x))/2);
+}

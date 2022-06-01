@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <math.h>
+
+int main(){
+    
+    int d;
+    d = 10;
+    int *p;
+    p = &d;
+    printf("%d %d", d, *p);
+    d = 20;
+    printf("\n %d %d", d, *p);
+    *p = 1000;
+    printf("\n %d %d", d, *p);
+    printf("\n %p", &d);
+    int tab[2] = {333,444};
+    p = &tab;
+    printf("\npointer=%p, value = %d ", *p, *p);
+    p = p + 1;
+    printf("\npointer=%p, value = %d ", *p, *p);
+}

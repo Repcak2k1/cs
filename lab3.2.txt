@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <math.h>
+
+int factorialNew;
+int factorialOld;
+int ReadN();
+int Calculate(int n);
+int PrintN(int factorialNew);
+//----------------------------MAIN----------------------------------------------
+int main(){
+    int n;
+    int ans;
+    n = ReadN();
+    ans = Calculate(n);
+    PrintN(ans);
+}
+//----------------------------FUNCTION DEFINITION-------------------------------
+int ReadN(){
+    int a;
+    printf("Insert number which will be factored: ");
+    scanf("%d", &a);
+    return a;
+}
+int Calculate(int n){
+    factorialOld = 1;
+    while(n>0){
+        
+        factorialNew = factorialOld*n;
+        factorialOld = factorialNew;
+        n = n - 1;
+    }
+    return factorialNew;
+}
+int PrintN(int factorialNew){
+    printf("\nYour factorial is equal to: %d", factorialNew);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int factorialOld;
+
+
+
+
+int ReadN();
+int Calculate();
+int PrintN();
+int n;
+//----------------------------MAIN----------------------------------------------
+int main(){
+    ReadN();
+    Calculate();
+    PrintN();
+}
+//----------------------------FUNCTION DEFINITION-------------------------------
+int ReadN(){
+    printf("Insert number which will be factored: ");
+    scanf("%d", &n);
+}
+int Calculate(){
+    factorialOld = 1;
+    while(n>0){
+        
+        factorialNew = factorialOld*n;
+        factorialOld = factorialNew;
+        n = n - 1;
+    }
+}
+int PrintN(){
+    printf("\nYour factorial is equal to: %d", factorialNew);
+}
