@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <math.h>
+#define Cd 10.0
+#define g 9.81
+#define S 5.0
+#define q  1.0
+#define m 5.0
+
+/*double rk4(double x0, double y0, double h, double (*fun)(double, double))
+{
+  double y1;
+  double k1,k2,k3,k4;
+  k1 = h*fun(x0     ,y0      );
+  k2 = h*fun(x0+h/2.,y0+k1/2.);
+  k3 = h*fun(x0+h/2.,y0+k2/2.);
+  k4 = h*fun(x0+h   ,y0+k3   );
+  y1 = y0 + (k1+2.*k2+2.*k3+k4)/6.;
+  return y1;
+}*/
+
+double dx(double t, double x, double y, double vx, double vy){
+    return vx;
+}
+double dy(double t, double x, double y, double vx, double vy){
+    return vy;
+}
+double dvx(double t, double x, double y, double vx, double vy){
+    return ((-Cd * S * (q/2) * sqrt(vx * vx + vy * vy) * vx )/m);
+}
+double dvy(double t, double x, double y, double vx, double vy){
+    return ((-Cd * S * (q/2) * sqrt(vx * vx + vy * vy) * vy - m*g)/m);
+}
+
+
+int main(){
+    FILE *fp = fopen("parameters_of_ball.txt","w");
+    int NS = 2000;
+    double h = 0.001;
+    double alpha, v0, t, H;
+    alpha = 0.52;
+    v0 = 10.0;
+    H = 1.0;
+    double x[NS];
+    double y[NS];
+    double vx[NS];
+    double vy[NS];
+    x[0] = 0;
+    y[0] = H;
+    vx[0] = v0 * cos(alpha);
+    vy[0] = v0 * sin(alpha);
+    fprintf(fp, "X : %lf\t Y : %lf\t Vx : %lf\t Vy :%lf", x[0], y[0], vx[0], vy[0]);
+    double kx1, ky1, kvx1, kvy1, kx2, ky2, kvx2, kvy2, kx3, ky3, kvx3, kvy3, kx4, ky4, kvx4, kvy4;
+    for(int i = 1; i <= NS; i++){
+        kx1 = h * dx(( i - 1) * h, x[i-1], y[i-1], vx[i-1], vy[i-1]);
+        ky1 = h * dy(( i - 1) * h, x[i-1], y[i-1], vx[i-1], vy[i-1]);
+        kvx1 = h * dvx(( i - 1) * h, x[i-1], y[i-1], vx[i-1], vy[i-1]);
+        kvy1 = h * dvy(( i - 1) * h, x[i-1], y[i-1], vx[i-1], vy[i-1]);
+        
+        kx2 = h * dx(( i - 1) * h, x[i-1] + kx1/2 , y[i-1] + ky1/2, vx[i-1] + kvx1/2, vy[i-1] + kvy1/2);
+        ky2 = h * dy(( i - 1) * h, x[i-1] + kx1/2 , y[i-1] + ky1/2, vx[i-1] + kvx1/2, vy[i-1] + kvy1/2);
+        kvx2 = h * dvx(( i - 1) * h, x[i-1] + kx1/2 , y[i-1] + ky1/2, vx[i-1] + kvx1/2, vy[i-1] + kvy1/2);
+        kvy2 = h * dvy(( i - 1) * h, x[i-1] + kx1/2 , y[i-1] + ky1/2, vx[i-1] + kvx1/2, vy[i-1] + kvy1/2);
+        
+        kx3 = h * dx(( i - 1) * h, x[i-1] + kx2/2 , y[i-1] + ky2/2, vx[i-1] + kvx2/2, vy[i-1] + kvy2/2);
+        ky3 = h * dy(( i - 1) * h, x[i-1] + kx2/2 , y[i-1] + ky2/2, vx[i-1] + kvx2/2, vy[i-1] + kvy2/2);
+        kvx3 = h * dvx(( i - 1) * h, x[i-1] + kx2/2 , y[i-1] + ky2/2, vx[i-1] + kvx2/2, vy[i-1] + kvy2/2);
+        kvy3 = h * dvy(( i - 1) * h, x[i-1] + kx2/2 , y[i-1] + ky2/2, vx[i-1] + kvx2/2, vy[i-1] + kvy2/2);
+        
+        kx4 = h * dx(( i - 1) * h, x[i-1] + kx3, y[i-1] + ky3, vx[i-1] + kvx3, vy[i-1] + kvy3);
+        ky4 = h * dy(( i - 1) * h, x[i-1] + kx3, y[i-1] + ky3, vx[i-1] + kvx3, vy[i-1] + kvy3);
+        kvx4 = h * dvx(( i - 1) * h, x[i-1] + kx3, y[i-1] + ky3, vx[i-1] + kvx3, vy[i-1] + kvy3);
+        kvy4 = h * dvy(( i - 1) * h, x[i-1] + kx3, y[i-1] + ky3, vx[i-1] + kvx3, vy[i-1] + kvy3);
+        
+        x[i] = x[i-1] + (kx1 + 2.0 * kx2 + 2.0 * kx3 + kx4)/6;
+        y[i] = y[i-1] + (ky1 + 2.0 * ky2 + 2.0 * ky3 + ky4)/6;
+        vx[i] = vx[i-1] + (kvx1 + 2.0 * kvx2 + 2.0 * kvx3 + kvx4)/6;
+        vy[i] = vy[i-1] + (kvy1 + 2.0 * kvy2 + 2.0 * kvy3 + kvy4)/6;
+        fprintf(fp, "\nX : %lf\t Y : %lf\t Vx : %lf\t Vy :%lf", x[i], y[i], vx[i], vy[i] );
+    }
+    
+    
+    
+    fclose(fp);
+}
